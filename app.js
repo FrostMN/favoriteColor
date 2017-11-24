@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var store = new MongoDBStore( {uri : mongo_url, collection: 'sessions' }, function(err) {
+var store = new MongoDBStore( {uri : mongo_url, collection: 'sessions-color' }, function(err) {
     if (err) {
         console.log('Error, cat connect to store session')
     }
