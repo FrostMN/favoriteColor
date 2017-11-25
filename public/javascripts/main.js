@@ -4,7 +4,7 @@ function showModal(id) {
     modal.style.display = "block";
 }
 
-function closeMoodal(obj) {
+function closeModal(obj) {
     var caller = obj;
     while (caller.className != "modal") {
         caller = caller.parentNode;
