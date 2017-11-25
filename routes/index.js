@@ -65,7 +65,7 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
         req.user.save()
             .then( () => {
                 req.flash('updateMsg', 'Your data was updates');
-                res.redirect('/secret');
+                res.redirect('/secrets');
             })
             .catch( (err) => {
                 if(err.name == 'ValidationError') {
