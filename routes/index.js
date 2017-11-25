@@ -58,6 +58,7 @@ router.get('/logout', function (req, res, next) {
 router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
     if( req.body.color || req.body.luckyNumber ) {
         // add to the req.user.favs object
+
         req.user.favorites.color = req.body.color || req.user.favorites.color;
         req.user.favorites.luckyNumber = req.body.luckyNumber || req.user.favorites.luckyNumber;
 
