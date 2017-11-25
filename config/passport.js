@@ -66,7 +66,7 @@ module.exports = function(passport) {
                 //Check to see if there is already a user with that username
                 if (user) {
                     console.log('user with that name exists');
-                    return done(null, false, req.flash('signupMessage', 'Sorry, username already taken'));
+                    return done(null, false, req.flash('message', 'Sorry, username already taken'));
                 }
 
                 //else, the username is available. Create a new user, and save to DB.
