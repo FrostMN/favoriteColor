@@ -12,7 +12,7 @@ a {
 }
 
 .modal-content {
-  position: fixed;
+  position: absolute;
   background-color: white;
   border: solid 1px black;
 
