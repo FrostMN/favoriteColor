@@ -32,7 +32,7 @@ router.post('/signup', passport.authenticate('local-signup', {
     failureFlash: true
 }));
 
-/* DET secret page*/
+/* GET secret page*/
 router.get('/secrets', isLoggedIn, function (req, res, next) {
     var user = req.user.local;
 
@@ -54,5 +54,32 @@ router.get('/logout', function (req, res, next) {
     req.logout();
     res.redirect('/');
 });
+
+router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
+    if( req.body.color || req.body.luckyNumber ) {
+        // add to the req.user.favs object
+        req.user.favorites.color = req.body.color || req.user.favorites.color;
+        req.user.favorites.luckyNumber = req.body.luckyNumber || req.user.favorites.luckyNumber;
+
+        //save modified user
+        req.user.save()
+            .then( () => {
+                req.flaah('updateMsg', 'Your data was updates');
+                res.redirect('/secret');
+            })
+            .catch( (err) => {
+                if(err.name == 'ValidationError') {
+                    req.flash('updateMsg', 'Your data was not valid');
+                    res.redirect('/secret')
+                } else {
+                    next(err);
+                }
+            });
+    } else {
+        req.flash('updateMsg', 'please enter data')
+        res.redirect('/secret');
+    }
+});
+
 
 module.exports = router;

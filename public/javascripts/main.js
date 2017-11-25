@@ -1,5 +1,4 @@
 function showModal(id) {
-    alert("in alert")
     var modal = document.getElementById(id);
     modal.style.display = "block";
 }
