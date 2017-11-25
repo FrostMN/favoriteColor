@@ -1,5 +1,5 @@
 var LocalStrategy = require('passport-local').Strategy;
-
+var flash = require('express-flash');
 var User = require('../models/user');
 
 
