@@ -15,8 +15,8 @@ a {
   position: fixed;
   background-color: white;
   border: solid 1px black;
-  left: 0;
-  right: 0;
-  top: 3em;
-  width: 10em;
+
+  margin: 3em auto;
+
+  padding: 1em;
 }
