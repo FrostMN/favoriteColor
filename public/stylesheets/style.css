@@ -22,6 +22,8 @@ a {
 
   background: rgba(255,255,255,0.5);
 
+  text-align: center;
+
 
 }
 
@@ -29,6 +31,8 @@ a {
   position: absolute;
   background-color: white;
   border: solid 1px black;
+
+  display: inline-block;
 
   margin: 3em auto;
 
