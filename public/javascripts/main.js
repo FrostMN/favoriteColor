@@ -9,5 +9,5 @@ function closeModal(obj) {
     while (caller.className != "modal") {
         caller = caller.parentNode;
     }
-    caller.style.display = "nonde";
+    caller.style.display = "none";
 }
