@@ -70,14 +70,14 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
             .catch( (err) => {
                 if(err.name == 'ValidationError') {
                     req.flash('updateMsg', 'Your data was not valid');
-                    res.redirect('/secret')
+                    res.redirect('/secrets')
                 } else {
                     next(err);
                 }
             });
     } else {
         req.flash('updateMsg', 'please enter data')
-        res.redirect('/secret');
+        res.redirect('/secrets');
     }
 });
 
