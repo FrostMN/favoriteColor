@@ -64,7 +64,7 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
         //save modified user
         req.user.save()
             .then( () => {
-                req.flaah('updateMsg', 'Your data was updates');
+                req.flash('updateMsg', 'Your data was updates');
                 res.redirect('/secret');
             })
             .catch( (err) => {
