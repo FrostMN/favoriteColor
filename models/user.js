@@ -5,6 +5,13 @@ var userSchema = mongoose.Schema({
     local: {
         username: String,
         password: String
+    },
+
+    signupDate: { type: Date, default: Date.now() },
+
+    favorites: {
+        color: String,
+        luckyNumber: Number
     }
 });
 
