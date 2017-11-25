@@ -64,7 +64,7 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
         //save modified user
         req.user.save()
             .then( () => {
-                req.flash('updateMsg', 'Your data was updates');
+                req.flash('updateMsg', 'Your data was updated');
                 res.redirect('/secrets');
             })
             .catch( (err) => {
@@ -76,7 +76,7 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
                 }
             });
     } else {
-        req.flash('updateMsg', 'please enter data')
+        req.flash('updateMsg', 'please enter data');
         res.redirect('/secrets');
     }
 });
