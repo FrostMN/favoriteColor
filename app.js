@@ -18,15 +18,16 @@ var users = require('./routes/users');
 
 var app = express();
 
+// gets env vars and builds a connection string
 var mongo_url = process.env.MONGO_URL;
 mongo_url = mongo_url.replace('{user}', process.env.MONGO_COLOR_USER);
 mongo_url = mongo_url.replace('{pword}', process.env.MONGO_COLOR_PASSWORD);
 mongo_url = mongo_url.replace('{db}', process.env.MONGO_COLOR_DB_NAME);
 
-console.log(mongo_url);
-
+// determines if deployed or local for ceritan assignments
 var local = process.env.LOCAL;
 
+// connects to mongodb using mongoose
 mongoose.Promise = global.Promise;
 mongoose.connect(mongo_url, { useMongoCLient: true })
     .then( () => { console.log('Connected to MongoDB'); })
@@ -45,6 +46,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// changes the name of the session store depending on if app is running on heroku or locally
 if (local) {
     var store = new MongoDBStore({uri: mongo_url, collection: 'sessions'}, function (err) {
         if (err) {
@@ -59,6 +61,7 @@ if (local) {
     });
 }
 
+// sets up session
 app.use(session({
     secret: 'need better',
     resave: true,
@@ -66,10 +69,12 @@ app.use(session({
     store: store
 }));
 
+// registers passport
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+// registers routes
 app.use('/', index);
 app.use('/users', users);
 

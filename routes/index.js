@@ -48,11 +48,13 @@ function isLoggedIn(req, res, next) {
     }
 }
 
+// route to logout
 router.get('/logout', function (req, res, next) {
     req.logout();
     res.redirect('/');
 });
 
+// route for saving your favorite color and lucky number
 router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
     if( req.body.color || req.body.luckyNumber ) {
         // add to the req.user.favs object
@@ -80,8 +82,9 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
     }
 });
 
-router.get('/auth/twitter', passport.authenticate('twitter'));
 
+// defines the routes for twitter auth
+router.get('/auth/twitter', passport.authenticate('twitter'));
 router.get('/auth/twitter/callback', passport.authenticate('twitter', {
     successRedirect: '/secrets',
     failureRedirect: '/',

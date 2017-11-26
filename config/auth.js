@@ -1,6 +1,8 @@
 var local = process.env.LOCAL;
 
+// sets the env vars for twitter auth depending if on heroku or local
 if (local) {
+    console.log("local config");
     module.exports = {
         twitterAuth: {
             consumerKey: process.env.TWITTER_CONSUMER_KEY,
@@ -9,6 +11,7 @@ if (local) {
         }
     }
 } else {
+    console.log("remote config");
     module.exports = {
         twitterAuth: {
             consumerKey: process.env.TWITTER_CONSUMER_KEY,

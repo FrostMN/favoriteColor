@@ -115,38 +115,81 @@ module.exports = function(passport) {
             });
         }));
 
-    passport.use(new TwitterStrategy({
+    passport.use('twitter', new TwitterStrategy({
         consumerKey: configAuth.twitterAuth.consumerKey,
         consumerSecret: configAuth.twitterAuth.consumerSecret,
-        callbackUrl: configAuth.twitterAuth.callbackUrl
-    }, function (token, tokenSecret, profile, done) {
+        callbackUrl: configAuth.twitterAuth.callbackUrl,
+        passReqToCallback: true
+    },
+
+    function (req, token, tokenSecret, profile, done) {
         process.nextTick(function () {
-            User.findOne({'twitter.id': profile.id}, function (err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (user) {
-                    return done(null, err);
-                }
-
-                var newUser = User();
-                var twitter = {
-                    id: profile.id,
-                    token: token,
-                    username: profile.username,
-                    displayName: profile.displayName
-                };
-
-                newUser.twitter = twitter;
-
-                newUser.save(function (err) {
+            console.log("in twitter");
+            //checks if there is a user in the req if not just adds a new twitter user
+            // if there is it adds the twitter user to the existing user in the req
+            if( !req.user) {
+                console.log("in !req.user");
+                User.findOne({'twitter.id': profile.id}, function (err, user) {
                     if (err) {
-                        return done(err)
+                        console.log("in passport twitter error");
+                        return done(err);
                     }
-                    return done(null, newUser)
+                    if (user) {
+                        console.log("in passport twitter user");
+                        return done(null, user);
+                    }
+
+                    console.log("in twitter passed ifs");
+
+
+                    var newUser = User();
+                    var twitter = {
+                        id: profile.id,
+                        token: token,
+                        username: profile.username,
+                        displayName: profile.displayName
+                    };
+
+                    newUser.twitter = twitter;
+
+                    newUser.save(function (err) {
+                        if (err) {
+                            return done(err)
+                        }
+                        return done(null, newUser)
+                    });
                 });
-            });
+            } else {
+                console.log("in else");
+                var local_user = req.user.local.username;
+                console.log(local_user);
+                User.findOne({'local.username': local_user}, function (err, user) {
+                    if (err) {
+                        console.log("in passport twitter error");
+                        return done(err);
+                    }
+                    if (user) {
+                        console.log("in passport twitter user");
+
+
+                        var twitter = {
+                            id: profile.id,
+                            token: token,
+                            username: profile.username,
+                            displayName: profile.displayName
+                        };
+
+                        user.twitter = twitter;
+
+                        user.save(function (err) {
+                            if(err) {
+                                return(done(err))
+                            }
+                            return done(null, user);
+                        });
+                    }
+                });
+            }
         });
     }));
-
 };   //end of outermost callback!
