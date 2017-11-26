@@ -1,4 +1,8 @@
 var LocalStrategy = require('passport-local').Strategy;
+var TwitterStrategy  = require('passport-twitter');
+
+var configAuth = require('./auth');
+
 var User = require('../models/user');
 
 
@@ -110,5 +114,39 @@ module.exports = function(passport) {
                 })
             });
         }));
+
+    passport.use(new TwitterStrategy({
+        consumerKey: configAuth.twitterAuth.consumerKey,
+        consumerSecret: configAuth.twitterAuth.consumerSecret,
+        callbackUrl: configAuth.twitterAuth.callbackUrl
+    }, function (token, tokenSecret, profile, done) {
+        process.nextTick(function () {
+            User.findOne({'twitter.id': profile.id}, function (err, user) {
+                if (err) {
+                    return done(err);
+                }
+                if (user) {
+                    return done(null, err);
+                }
+
+                var newUser = User();
+                var twitter = {
+                    id: profile.id,
+                    token: token,
+                    username: profile.username,
+                    displayName: profile.displayName
+                };
+
+                newUser.twitter = twitter;
+
+                newUser.save(function (err) {
+                    if (err) {
+                        return done(err)
+                    }
+                    return done(null, newUser)
+                });
+            });
+        });
+    }));
 
 };   //end of outermost callback!

@@ -7,12 +7,23 @@ var userSchema = mongoose.Schema({
         password: String
     },
 
-    signupDate: { type: Date, default: Date.now() },
+    twitter : {
+        id: String,
+        token: String,
+        displayName: String,
+        username: String
+    },
+
+    signupDate: {
+        type: Date,
+        default: Date.now()
+    },
 
     favorites: {
         color: String,
         luckyNumber: Number
     }
+
 });
 
 userSchema.methods.generateHash = function (password) {

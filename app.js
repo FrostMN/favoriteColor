@@ -25,6 +25,7 @@ mongo_url = mongo_url.replace('{db}', process.env.MONGO_COLOR_DB_NAME);
 
 console.log(mongo_url);
 
+var local = process.env.LOCAL;
 
 mongoose.Promise = global.Promise;
 mongoose.connect(mongo_url, { useMongoCLient: true })
@@ -44,11 +45,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var store = new MongoDBStore( {uri : mongo_url, collection: 'sessions-color' }, function(err) {
-    if (err) {
-        console.log('Error, cat connect to store session')
-    }
-});
+if (local) {
+    var store = new MongoDBStore({uri: mongo_url, collection: 'sessions'}, function (err) {
+        if (err) {
+            console.log('Error, can\'t connect to store session')
+        }
+    });
+} else {
+    var store = new MongoDBStore({uri: mongo_url, collection: 'sessions-color'}, function (err) {
+        if (err) {
+            console.log('Error, can\'t connect to store session')
+        }
+    });
+}
 
 app.use(session({
     secret: 'need better',

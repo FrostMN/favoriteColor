@@ -34,11 +34,9 @@ router.post('/signup', passport.authenticate('local-signup', {
 
 /* GET secret page*/
 router.get('/secrets', isLoggedIn, function (req, res, next) {
-    var user = req.user.local;
+    var user = req.user;
 
-    res.render('secrets', {
-        username: user.username
-    });
+    res.render('secrets', { user: user });
 });
 
 /* Middle ware to determine logged in*/
@@ -69,7 +67,7 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
                 res.redirect('/secrets');
             })
             .catch( (err) => {
-                if(err.name == 'ValidationError') {
+                if(err.name === 'ValidationError') {
                     req.flash('updateMsg', 'Your data was not valid');
                     res.redirect('/secrets')
                 } else {
@@ -81,6 +79,13 @@ router.post('/saveSecrets', isLoggedIn, function (req, res, next) {
         res.redirect('/secrets');
     }
 });
+
+router.get('/auth/twitter', passport.authenticate('twitter'));
+
+router.get('/auth/twitter/callback', passport.authenticate('twitter', {
+    successRedirect: '/secrets',
+    failureRedirect: '/',
+}));
 
 
 module.exports = router;
